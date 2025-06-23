@@ -28,7 +28,7 @@ interface GameState {
   getTimeUntilNextPaint: () => number;
 }
 
-const COOLDOWN_TIME = 5 * 60 * 1000; // 5 minutes in milliseconds
+const COOLDOWN_TIME = 15 * 1000; // 5 minutes in milliseconds
 const LOCAL_TEAM_KEY = 'pixelwar_selected_team';
 const LOCAL_PAINT_TIME_KEY = 'pixelwar_last_paint_time';
 
