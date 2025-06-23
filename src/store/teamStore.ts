@@ -29,11 +29,22 @@ interface GameState {
 }
 
 const COOLDOWN_TIME = 5 * 60 * 1000; // 5 minutes in milliseconds
+const LOCAL_TEAM_KEY = 'pixelwar_selected_team';
+const LOCAL_PAINT_TIME_KEY = 'pixelwar_last_paint_time';
+
+function loadInitialTeam(): Team | null {
+  const t = localStorage.getItem(LOCAL_TEAM_KEY);
+  return t === null ? null : (t as Team);
+}
+function loadInitialPaintTime(): number | null {
+  const t = localStorage.getItem(LOCAL_PAINT_TIME_KEY);
+  return t === null ? null : Number(t);
+}
 
 export const useGameStore = create<GameState>((set, get) => ({
   // Initial state
-  selectedTeam: null,
-  lastPaintTime: null,
+  selectedTeam: loadInitialTeam(),
+  lastPaintTime: loadInitialPaintTime(),
   pixels: [],
   canvasSize: { width: 100, height: 100 },
   isTeamSelectorOpen: false,
@@ -69,6 +80,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   selectTeam: (team: Team) => {
+    localStorage.setItem(LOCAL_TEAM_KEY, team);
     set({ selectedTeam: team, isTeamSelectorOpen: false });
   },
 
@@ -107,8 +119,10 @@ export const useGameStore = create<GameState>((set, get) => ({
       get().setPixel(newPixel);
 
       // Modal'ı hemen kapat ve bekleme süresini başlat
+      const now = Date.now();
+      localStorage.setItem(LOCAL_PAINT_TIME_KEY, String(now));
       set({ 
-        lastPaintTime: Date.now(),
+        lastPaintTime: now,
         isPaintModalOpen: false,
         selectedPixel: null 
       });
