@@ -2,6 +2,17 @@ import { supabase } from '../supabaseClient';
 import { LeaderboardEntry, PaintPayload, Pixel, Team } from '../types';
 import { getTeamColor } from './colors';
 
+// Mock user for development
+interface User {
+  id: string;
+  team: Team | null;
+}
+
+const mockUser: User = {
+  id: 'mock-user-id',
+  team: null
+};
+
 // Canvas verilerini getir
 export const getCanvas = async (): Promise<Pixel[]> => {
   const { data, error } = await supabase
@@ -68,12 +79,6 @@ export const getLeaderboard = async (): Promise<LeaderboardEntry[]> => {
 
 // Takım seçimi
 export const selectTeam = async (team: Team): Promise<boolean> => {
-  // Gerçek uygulamada: return fetch(`${API_BASE_URL}/team-select`, {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify({ team })
-  // }).then(res => res.json());
-
   // Mock implementation
   mockUser.team = team;
   return true;
@@ -81,7 +86,5 @@ export const selectTeam = async (team: Team): Promise<boolean> => {
 
 // Kullanıcı bilgileri
 export const getMe = async (): Promise<User> => {
-  // Gerçek uygulamada: return fetch(`${API_BASE_URL}/me`).then(res => res.json());
-  
   return mockUser;
 }; 
